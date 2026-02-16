@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Generated data (rebuild with: npm run build:data)
+/public/data/
+
+# Notion export source data (user-specific, not committed)
+/data/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Env
+.env
+.env.*
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Claude Code
+.claude/
+
+# Logs
+*.log
+npm-debug.log*

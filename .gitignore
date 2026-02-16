@@ -8,7 +8,8 @@ dist/
 /public/data/
 
 # Notion export source data (user-specific, not committed)
-/data/
+/data/*
+!/data/test/
 
 # Editor
 .vscode/

@@ -60,15 +60,28 @@ export interface ScannedFile {
   dirParts: string[];
 }
 
-export interface Manifest {
-  exportName: string;
-  databases: Array<{
-    uid: string;
-    title: string;
-    rowCount: number;
-    columnCount: number;
-    parentPageUid?: string;
-  }>;
+export interface ManifestDatabase {
+  uid: string;
+  title: string;
+  rowCount: number;
+  columnCount: number;
+  parentPageUid?: string;
+}
+
+export interface ExportEntry {
+  name: string;
+  databases: ManifestDatabase[];
   pageCount: number;
+}
+
+export interface Manifest {
+  exports: ExportEntry[];
   generatedAt: string;
+}
+
+/** Collected data from processing a single export directory */
+export interface ExportData {
+  name: string;
+  databases: DatabaseDef[];
+  pages: PageDef[];
 }

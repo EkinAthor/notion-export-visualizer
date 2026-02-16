@@ -69,7 +69,7 @@ export function DatabaseView() {
           <TableHeader columns={columns} sort={sort} onSort={setSort} />
           <tbody>
             {pagedRows.map((row, i) => (
-              <TableRow key={row.uid || i} row={row} columns={columns} />
+              <TableRow key={`${row.uid ?? 'r'}-${i}`} row={row} columns={columns} />
             ))}
           </tbody>
         </table>

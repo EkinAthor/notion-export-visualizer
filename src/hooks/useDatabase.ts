@@ -9,6 +9,7 @@ export function useDatabase(uid: string | undefined) {
 
   useEffect(() => {
     if (!uid) return;
+    setDatabase(null);
     setLoading(true);
     setError(null);
     loadDatabase(uid)

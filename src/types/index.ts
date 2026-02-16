@@ -47,10 +47,14 @@ export interface ManifestDatabase {
   parentPageUid?: string;
 }
 
-export interface Manifest {
-  exportName: string;
+export interface ExportEntry {
+  name: string;
   databases: ManifestDatabase[];
   pageCount: number;
+}
+
+export interface Manifest {
+  exports: ExportEntry[];
   generatedAt: string;
 }
 

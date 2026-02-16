@@ -35,22 +35,22 @@ export default function App() {
 
   if (!manifest) return <LoadingSpinner />;
 
-  // First top-level database for default redirect
-  const defaultDb = manifest.databases.find(d => !d.parentPageUid);
+  // Flatten all databases across exports for default redirect
+  const allDatabases = manifest.exports.flatMap(e => e.databases);
+  const defaultDb = allDatabases.find(d => !d.parentPageUid);
 
   return (
     <BrowserRouter>
       <ErrorBoundary>
         <div className={`app-shell ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
           <Sidebar
-            databases={manifest.databases}
+            exports={manifest.exports}
             isOpen={sidebarOpen}
             onToggle={() => setSidebarOpen(!sidebarOpen)}
           />
 
           <div className="main-area">
             <TopBar
-              exportName={manifest.exportName}
               onSearchOpen={search.open}
             />
 

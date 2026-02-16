@@ -1,0 +1,14 @@
+{
+  "title": "Multi-Export Support",
+  "version": "1.0",
+  "requirements": [
+    { "id": "R1", "description": "Build pipeline discovers all subdirs of data/ as exports", "status": "done" },
+    { "id": "R2", "description": "Manifest schema supports multiple exports", "status": "done" },
+    { "id": "R3", "description": "Sidebar groups databases by export name", "status": "done" },
+    { "id": "R4", "description": "Test export with synthetic data committed to git", "status": "done" },
+    { "id": "R5", "description": "Test export exercises all column types", "status": "done" },
+    { "id": "R6", "description": "Test export includes inline DB and asset references", "status": "done" },
+    { "id": "R7", "description": "Search works across all exports", "status": "done" },
+    { "id": "R8", "description": "Existing single-export behavior preserved (backwards compatible)", "status": "done" }
+  ]
+}

@@ -1,13 +1,12 @@
 interface TopBarProps {
-  exportName: string;
   onSearchOpen: () => void;
 }
 
-export function TopBar({ exportName, onSearchOpen }: TopBarProps) {
+export function TopBar({ onSearchOpen }: TopBarProps) {
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <h1 className="topbar-title">{exportName}</h1>
+        <h1 className="topbar-title">Notion Export Visualizer</h1>
       </div>
       <button className="search-trigger" onClick={onSearchOpen}>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">

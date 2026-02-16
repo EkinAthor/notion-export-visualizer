@@ -1,0 +1,4 @@
+Task name,Status,Priority,Date Range
+Design API schema,Done,High,2025-01-15 → 2025-02-01
+Implement endpoints,Done,High,2025-02-01 → 2025-03-01
+Write documentation,In Progress,Medium,2025-03-01 → 2025-03-15

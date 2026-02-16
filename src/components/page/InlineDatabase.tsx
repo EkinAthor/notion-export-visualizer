@@ -21,7 +21,7 @@ export function InlineDatabase({ uid }: InlineDatabaseProps) {
           <TableHeader columns={database.columns} sort={null} onSort={() => {}} />
           <tbody>
             {database.rows.map((row, i) => (
-              <TableRow key={row.uid || i} row={row} columns={database.columns} />
+              <TableRow key={`${row.uid ?? 'r'}-${i}`} row={row} columns={database.columns} />
             ))}
           </tbody>
         </table>

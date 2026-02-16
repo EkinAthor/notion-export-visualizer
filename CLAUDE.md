@@ -85,9 +85,10 @@ npm run lint         # ESLint
 Edit `scripts/lib/type-inferrer.ts`. The inferrer checks in priority order: date_range, date, url, person (name hint), status (name hint + small set), multi_select (commas), select (small unique set), text (fallback). Adjust thresholds or add column name hints.
 
 ### Adding a new Notion export
-1. Unzip into `data/{name}/`
-2. Update `EXPORT_DIR` in `scripts/build-data.ts`
-3. Run `npm run build:data`
+1. Unzip into `data/{name}/` (each subdirectory of `data/` is auto-discovered as a separate export)
+2. Run `npm run build:data`
+
+Note: `data/test/` contains a synthetic test export committed to git for development/testing. All other `data/` subdirectories are gitignored.
 
 ### Improving row-to-page matching
 The matching logic is in `scripts/lib/cross-ref-resolver.ts` (`matchRowsToPages`). It normalizes titles by lowercasing and stripping non-alphanumeric chars. The 19 unmatched rows (out of 602) in the Meetings DB likely have title mismatches due to special characters or truncation.

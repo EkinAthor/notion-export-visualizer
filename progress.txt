@@ -11,3 +11,16 @@
 [x] Verify: npm run build:data
 [x] Verify: npm run dev (visual check)
 [x] Verify: npm run build (production build)
+
+--- QoL Improvements ---
+[x] Fix sidebar header overlap with collapse button (CSS padding)
+[x] Add visual hierarchy for .sidebar-section-nested (CSS)
+[x] Add person type to options population in type-inferrer.ts
+[x] Create useViewPersistence hook (localStorage sync)
+[x] Integrate useViewPersistence into DatabaseView
+[x] Rich rendering of page metadata via CellRenderer
+[x] Pass database columns from PageView to PageMetadataBar
+[x] Replace filter <select> with tag-picker buttons in FilterBar
+[x] Add filter tag CSS styles
+[x] Verify: npm run build:data (person options populated)
+[x] Verify: npm run build (no TypeScript errors)

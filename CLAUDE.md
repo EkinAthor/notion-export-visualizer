@@ -37,7 +37,7 @@ npm run lint         # ESLint
 ## Important Conventions
 
 - **No tests exist yet.** If adding tests, use Vitest (already compatible with the Vite setup).
-- **URL-serialized state.** Filter and sort state lives in URL search params (`?sort=Date&dir=desc&f_Tags=Customer`), not React state. This makes views shareable/bookmarkable.
+- **URL-serialized state.** Filter and sort state lives in URL search params (`?sort=Date&dir=desc&f_Tags=Customer`), not React state. This makes views shareable/bookmarkable. State is also persisted to `localStorage` (keyed `db_view_{uid}`) and hydrated on mount when no URL params exist. URL params always take precedence.
 - **One JSON file per page.** Pages are loaded on demand to keep initial load fast. Databases are loaded in full (largest is 602 rows).
 - **Column types are inferred, not declared.** The type inferrer (`scripts/lib/type-inferrer.ts`) uses heuristics (value patterns + column name hints). Adjust thresholds there if type detection is wrong.
 - **`_all.csv` for data, view CSV for column order.** The build pipeline reads row data from `*_all.csv` but takes column ordering from the non-`_all` variant (which reflects the user's Notion view).
@@ -63,7 +63,7 @@ npm run lint         # ESLint
 | Area | Key files |
 |------|-----------|
 | Data loading | `data/loader.ts` (fetch + cache), `data/search-index.ts` |
-| Hooks | `useDatabase`, `usePage`, `useSearch`, `useFilter`, `useSort` |
+| Hooks | `useDatabase`, `usePage`, `useSearch`, `useFilter`, `useSort`, `useViewPersistence` |
 | Database view | `components/database/DatabaseView.tsx` (main), `FilterBar`, `Pagination`, `TableHeader`, `TableRow` |
 | Cell renderers | `components/cells/CellRenderer.tsx` dispatches to `TextCell`, `DateCell`, `TagsCell`, `UrlCell`, `PersonCell`, `StatusCell`, `SelectCell` |
 | Page view | `components/page/PageView.tsx` (main), `MarkdownRenderer`, `PageMetadataBar`, `InlineDatabase`, `AttachmentLink` |
@@ -100,3 +100,5 @@ The matching logic is in `scripts/lib/cross-ref-resolver.ts` (`matchRowsToPages`
 - **The UID regex.** Pattern: `/\s([0-9a-f]{32})(?:[._]|$)/`. Must match both `.md` (UID before `.`) and `_all.csv` (UID before `_`).
 - **Metadata parsing.** The MD parser treats `Key: Value` lines after the `# Title` as metadata until the first blank line. Lines where the colon position is >40 chars in or the key has >5 words are treated as body content, not metadata.
 - **No `import.meta.dirname` in browsers.** Build scripts use `import.meta.dirname` (Node.js only). The React SPA uses `import.meta.env.BASE_URL` (Vite only). Don't mix these.
+- **Page metadata uses CellRenderer.** `PageMetadataBar` accepts an optional `columns` prop. When provided, metadata values matching a column name render with the same typed cell renderers (tags, people, dates, etc.) used in database tables. `PageView` loads the parent database schema via `useDatabase(page?.databaseUid)` to supply this.
+- **Searchable multi-select filter.** Columns with `options` (select, multi_select, status, person) render a searchable dropdown in the filter popover. Users click the box to open a dropdown with a search field and checkboxes for multi-select. Selected values appear as chips in the trigger box. Columns without options still use freetext input.

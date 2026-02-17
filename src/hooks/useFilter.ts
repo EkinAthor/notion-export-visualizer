@@ -45,11 +45,30 @@ export function useFilter(columns: ColumnSchema[]) {
     return rows.filter(row => {
       return filters.every(f => {
         const cellVal = (row.values[f.column] || '').toLowerCase();
-        const filterVal = f.value.toLowerCase();
-        return cellVal.includes(filterVal);
+        const filterParts = f.value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        if (filterParts.length <= 1) {
+          return cellVal.includes(f.value.toLowerCase());
+        }
+        // AND: every selected tag must appear in the cell value
+        return filterParts.every(part => cellVal.includes(part));
       });
     });
   }, [filters]);
 
-  return { filters, setFilter, clearFilters, applyFilters };
+  const setFilters = useCallback((updates: Record<string, string | null>) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      for (const [column, value] of Object.entries(updates)) {
+        if (value) {
+          next.set(`f_${column}`, value);
+        } else {
+          next.delete(`f_${column}`);
+        }
+      }
+      next.delete('page');
+      return next;
+    });
+  }, [setSearchParams]);
+
+  return { filters, setFilter, setFilters, clearFilters, applyFilters };
 }

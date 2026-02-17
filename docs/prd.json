@@ -9,6 +9,11 @@
     { "id": "R5", "description": "Test export exercises all column types", "status": "done" },
     { "id": "R6", "description": "Test export includes inline DB and asset references", "status": "done" },
     { "id": "R7", "description": "Search works across all exports", "status": "done" },
-    { "id": "R8", "description": "Existing single-export behavior preserved (backwards compatible)", "status": "done" }
+    { "id": "R8", "description": "Existing single-export behavior preserved (backwards compatible)", "status": "done" },
+    { "id": "R9", "description": "Sidebar header text does not overlap collapse toggle button", "status": "done" },
+    { "id": "R10", "description": "Inline databases section in sidebar has visual hierarchy (smaller font, separator)", "status": "done" },
+    { "id": "R11", "description": "Filter and sort state persists to localStorage per database UID; URL params take precedence", "status": "done" },
+    { "id": "R12", "description": "Page metadata renders rich cell types (tags, people, dates, URLs) using CellRenderer", "status": "done" },
+    { "id": "R13", "description": "Filter popover uses clickable tag picker for columns with options (select, multi_select, status, person)", "status": "done" }
   ]
 }

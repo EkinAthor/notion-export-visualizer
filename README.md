@@ -31,9 +31,12 @@ Output:
 
 Loads the prebuilt JSON and renders:
 - **Database table views** with typed cell renderers, column sorting, filtering, and pagination
+- **Tag-picker filters** for select, multi-select, status, and person columns (clickable tag buttons instead of dropdowns)
+- **Persistent view state** -- filter and sort settings saved to localStorage per database, restored on revisit (URL params take precedence for shareability)
 - **Page views** with rendered markdown (GFM), images, attachments, and inline databases
+- **Rich page metadata** -- tags, people, dates, and URLs render with the same styled components as database cells
 - **Global search** (Ctrl+K) with word-matching across all pages
-- **Sidebar navigation** between databases
+- **Sidebar navigation** between databases with visual hierarchy for inline databases
 
 ## Notion Export Structure
 
@@ -90,6 +93,7 @@ src/                          # React SPA
     useSearch.ts              # Search state + Ctrl+K
     useFilter.ts              # URL-serialized column filters
     useSort.ts                # URL-serialized column sorting
+    useViewPersistence.ts     # localStorage sync for filter/sort per DB
   components/
     layout/                   # Sidebar, TopBar
     database/                 # DatabaseView, TableHeader, TableRow, FilterBar, Pagination

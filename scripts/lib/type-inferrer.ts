@@ -31,10 +31,10 @@ export function inferColumnTypes(
     const type = inferSingleColumn(name, values);
     const schema: ColumnSchema = { name, type };
 
-    if (type === 'select' || type === 'multi_select' || type === 'status') {
+    if (type === 'select' || type === 'multi_select' || type === 'status' || type === 'person') {
       const uniqueVals = new Set<string>();
       for (const v of values) {
-        if (type === 'multi_select') {
+        if (type === 'multi_select' || type === 'person') {
           v.split(',').forEach(s => uniqueVals.add(s.trim()));
         } else {
           uniqueVals.add(v);

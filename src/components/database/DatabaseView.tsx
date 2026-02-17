@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useDatabase } from '../../hooks/useDatabase';
 import { useFilter } from '../../hooks/useFilter';
 import { useSort } from '../../hooks/useSort';
+import { useViewPersistence } from '../../hooks/useViewPersistence';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
 import { FilterBar } from './FilterBar';
@@ -17,8 +18,9 @@ export function DatabaseView() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const columns = database?.columns || [];
-  const { filters, setFilter, clearFilters, applyFilters } = useFilter(columns);
+  const { filters, setFilter, setFilters, clearFilters, applyFilters } = useFilter(columns);
   const { sort, setSort, applySort } = useSort();
+  useViewPersistence(uid, columns);
 
   const currentPage = Number(searchParams.get('page')) || 1;
 
@@ -61,6 +63,7 @@ export function DatabaseView() {
         columns={columns}
         filters={filters}
         onSetFilter={setFilter}
+        onSetFilters={setFilters}
         onClearFilters={clearFilters}
       />
 

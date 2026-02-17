@@ -10,9 +10,6 @@ interface SidebarProps {
 export function Sidebar({ exports, isOpen, onToggle }: SidebarProps) {
   return (
     <>
-      <button className="sidebar-toggle" onClick={onToggle}>
-        {isOpen ? '◀' : '▶'}
-      </button>
       <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <h2>Databases</h2>
@@ -59,6 +56,9 @@ export function Sidebar({ exports, isOpen, onToggle }: SidebarProps) {
           })}
         </nav>
       </aside>
+      <button className="sidebar-toggle" onClick={onToggle}>
+        {isOpen ? '◀' : '▶'}
+      </button>
     </>
   );
 }

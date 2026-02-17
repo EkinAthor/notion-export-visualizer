@@ -115,7 +115,7 @@ The build pipeline infers column types from CSV data:
 | `date_range` | Contains ` → ` separator | `Sep 8, 2024 → Sep 12, 2024` |
 | `multi_select` | Comma-separated recurring values | `1on1, internal` |
 | `url` | Starts with `http://` or `https://` | Slide deck links |
-| `person` | Column name hint (Attendees, Assignee, etc.) | `Marek Ovcacek, Scott Lewis` |
+| `person` | Column name hint (Attendees, Assignee, etc.) | `John Smith, Jane Doe` |
 | `status` | Small set: Done / In progress / Not started | Task Status |
 | `select` | <15 unique values, no commas | Priority |
 | `text` | Default fallback | Name, Company |
@@ -150,6 +150,5 @@ The build pipeline infers column types from CSV data:
 ## Using with Your Own Data
 
 1. Export your Notion workspace (Settings > Export > Markdown & CSV)
-2. Unzip the export into `data/{name}/`
-3. Update the `EXPORT_DIR` path in `scripts/build-data.ts`
-4. Run `npm run build:data` and `npm run dev`
+2. Unzip the export into `data/{name}/` (multiple exports can be placed in `data/`)
+3. Run `npm run build:data` and `npm run dev`

@@ -1,10 +1,15 @@
-# Notion Export Visualizer
+# Notion Database Export Visualizer
 
-A read-only web app that loads data from an unzipped Notion export folder and renders it in a Notion-like fashion: database table views, page content with markdown rendering, search, and filtering.
+A read-only web app that loads data from an unzipped Notion database export folder and renders it in a Notion-like fashion: database table views, page content with markdown rendering, search, and filtering.
 
 Built with React + Vite. Fully client-side with build-time data processing into static JSON.
 
 ## Quick Start
+
+1. Export your Notion workspace (Settings > Export > Markdown & CSV)
+2. Unzip the export into `data/{name}/` (multiple exports can be placed in `data/`)
+3. Run `npm install`
+4. Run `npm run build:data` and `npm run dev`
 
 ```bash
 npm install
@@ -147,8 +152,4 @@ The build pipeline infers column types from CSV data:
 - **PapaParse** -- CSV parsing with BOM handling
 - **tsx** -- Run TypeScript build scripts directly
 
-## Using with Your Own Data
 
-1. Export your Notion workspace (Settings > Export > Markdown & CSV)
-2. Unzip the export into `data/{name}/` (multiple exports can be placed in `data/`)
-3. Run `npm run build:data` and `npm run dev`

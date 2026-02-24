@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import type { ExportData, Manifest } from './types.js';
+import type { ExportData, Manifest, ManifestPage } from './types.js';
 
 /**
  * Write all processed data as static JSON files to the output directory.
@@ -14,17 +14,44 @@ export function emitJson(
 
   // Write manifest
   const manifest: Manifest = {
-    exports: exports.map(exp => ({
-      name: exp.name,
-      databases: exp.databases.map(db => ({
-        uid: db.uid,
-        title: db.title,
-        rowCount: db.rows.length,
-        columnCount: db.columns.length,
-        parentPageUid: db.parentPageUid,
-      })),
-      pageCount: exp.pages.length,
-    })),
+    exports: exports.map(exp => {
+      // Build standalone page tree for the manifest
+      const standalone = exp.pages.filter(p => !p.databaseUid);
+      const childMap = new Map<string, string[]>();
+      for (const p of standalone) {
+        if (p.parentPageUid) {
+          const children = childMap.get(p.parentPageUid) || [];
+          children.push(p.uid);
+          childMap.set(p.parentPageUid, children);
+        }
+      }
+      const rootPages = standalone.filter(p => !p.parentPageUid);
+      const buildManifestPage = (uid: string): ManifestPage | null => {
+        const page = standalone.find(p => p.uid === uid);
+        if (!page) return null;
+        return {
+          uid: page.uid,
+          title: page.title,
+          childPageUids: childMap.get(page.uid) || [],
+        };
+      };
+      const standalonePages = rootPages
+        .map(p => buildManifestPage(p.uid))
+        .filter((p): p is ManifestPage => p !== null);
+
+      return {
+        name: exp.name,
+        databases: exp.databases.map(db => ({
+          uid: db.uid,
+          title: db.title,
+          rowCount: db.rows.length,
+          columnCount: db.columns.length,
+          parentPageUid: db.parentPageUid,
+        })),
+        standalonePages,
+        pageCount: exp.pages.length,
+      };
+    }),
     generatedAt: new Date().toISOString(),
   };
   writeJson(path.join(outputDir, 'manifest.json'), manifest);

@@ -38,6 +38,17 @@ export default function App() {
   // Flatten all databases across exports for default redirect
   const allDatabases = manifest.exports.flatMap(e => e.databases);
   const defaultDb = allDatabases.find(d => !d.parentPageUid);
+  const allStandalonePages = manifest.exports.flatMap(e => e.standalonePages || []);
+  const defaultPage = allStandalonePages[0];
+
+  let defaultRedirect: React.ReactNode;
+  if (defaultDb) {
+    defaultRedirect = <Navigate to={`/db/${defaultDb.uid}`} replace />;
+  } else if (defaultPage) {
+    defaultRedirect = <Navigate to={`/page/${defaultPage.uid}`} replace />;
+  } else {
+    defaultRedirect = <div className="empty-state">No databases or pages found</div>;
+  }
 
   return (
     <BrowserRouter>
@@ -58,11 +69,7 @@ export default function App() {
               <Routes>
                 <Route
                   path="/"
-                  element={
-                    defaultDb
-                      ? <Navigate to={`/db/${defaultDb.uid}`} replace />
-                      : <div className="empty-state">No databases found</div>
-                  }
+                  element={defaultRedirect}
                 />
                 <Route path="/db/:uid" element={<DatabaseView />} />
                 <Route path="/page/:uid" element={<PageView />} />

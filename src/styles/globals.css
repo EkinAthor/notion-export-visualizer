@@ -901,6 +901,17 @@ a:hover {
   font-style: italic;
 }
 
+.page-subpage-link {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--border-color);
+  text-underline-offset: 2px;
+}
+
+.page-subpage-link:hover {
+  text-decoration-color: var(--text-primary);
+}
+
 /* ===== Inline Database ===== */
 .inline-database {
   margin: 24px 0;

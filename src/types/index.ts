@@ -36,6 +36,7 @@ export interface Page {
   metadata: Record<string, string>;
   body: string;
   databaseUid?: string;
+  parentPageUid?: string;
   inlineDatabaseUids: string[];
   assets: string[];
 }
@@ -48,9 +49,16 @@ export interface ManifestDatabase {
   parentPageUid?: string;
 }
 
+export interface ManifestPage {
+  uid: string;
+  title: string;
+  childPageUids: string[];
+}
+
 export interface ExportEntry {
   name: string;
   databases: ManifestDatabase[];
+  standalonePages: ManifestPage[];
   pageCount: number;
 }
 

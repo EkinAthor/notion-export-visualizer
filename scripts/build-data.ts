@@ -216,6 +216,29 @@ function processExport(exportName: string, exportPath: string): ExportData {
 
   console.log(`Parsed ${pages.length} pages`);
 
+  // 3b. Assign parentPageUid for standalone pages (no databaseUid)
+  for (const page of pages) {
+    if (page.databaseUid) continue;
+
+    // Find this page's md file to get its dirParts
+    const mf = mdFiles.find(m => m.uid === page.uid);
+    if (!mf) continue;
+
+    // Build the parent directory path (all dirParts joined)
+    // e.g. for a file at Res/Links.md, dirParts = ["Res"], parent = "Res"
+    // For Res.md at root, dirParts = [], no parent
+    if (mf.dirParts.length === 0) continue;
+
+    const parentDir = mf.dirParts.join('/');
+    const parentUid = pageUidByDir.get(parentDir);
+    if (parentUid && parentUid !== page.uid) {
+      page.parentPageUid = parentUid;
+    }
+  }
+
+  const standalonePages = pages.filter(p => !p.databaseUid);
+  console.log(`  Standalone pages: ${standalonePages.length} (${standalonePages.filter(p => !p.parentPageUid).length} root)`);
+
   // 4. Match database rows ↔ pages
   for (const db of databases) {
     const dbPageFiles = mdFiles.filter(mf => {

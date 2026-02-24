@@ -11,6 +11,8 @@ export function PageView() {
   const { uid } = useParams<{ uid: string }>();
   const { page, loading, error } = usePage(uid);
   const { database } = useDatabase(page?.databaseUid);
+  const parentPageUid = (!page?.databaseUid && page?.parentPageUid) ? page.parentPageUid : undefined;
+  const { page: parentPage } = usePage(parentPageUid);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div className="error-state">Error: {error}</div>;
@@ -26,6 +28,11 @@ export function PageView() {
       {page.databaseUid && (
         <div className="page-breadcrumb">
           <Link to={`/db/${page.databaseUid}`}>← Back to database</Link>
+        </div>
+      )}
+      {!page.databaseUid && parentPage && (
+        <div className="page-breadcrumb">
+          <Link to={`/page/${parentPage.uid}`}>← {parentPage.title}</Link>
         </div>
       )}
 

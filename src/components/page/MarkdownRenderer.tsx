@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import type { Components } from 'react-markdown';
+
+const MD_UID_RE = /([0-9a-f]{32})\.md$/;
 
 interface MarkdownRendererProps {
   content: string;
@@ -10,6 +13,7 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ content, pageUid }: MarkdownRendererProps) {
   const basePath = `${import.meta.env.BASE_URL}data/assets/${pageUid}/`;
+  const navigate = useNavigate();
 
   const components: Components = {
     img: ({ src, alt, ...props }) => {
@@ -34,6 +38,27 @@ export function MarkdownRenderer({ content, pageUid }: MarkdownRendererProps) {
       // Handle CSV links as inline database references
       if (href?.endsWith('.csv')) {
         return <span className="inline-db-ref">{children}</span>;
+      }
+      // Handle internal .md links — extract UID and navigate via SPA
+      if (href) {
+        const decoded = decodeURIComponent(href);
+        const match = decoded.match(MD_UID_RE);
+        if (match) {
+          const targetUid = match[1];
+          return (
+            <a
+              href={`/page/${targetUid}`}
+              className="page-subpage-link"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/page/${targetUid}`);
+              }}
+              {...props}
+            >
+              {children}
+            </a>
+          );
+        }
       }
       return (
         <a href={href} target="_blank" rel="noopener noreferrer" {...props}>

@@ -45,6 +45,8 @@ export interface PageDef {
   body: string;
   /** UID of the database this page belongs to */
   databaseUid?: string;
+  /** UID of the parent page (for standalone page hierarchies) */
+  parentPageUid?: string;
   /** UIDs of inline databases referenced in this page */
   inlineDatabaseUids: string[];
   /** Asset files (images, attachments) relative to public/data/assets/ */
@@ -69,9 +71,16 @@ export interface ManifestDatabase {
   parentPageUid?: string;
 }
 
+export interface ManifestPage {
+  uid: string;
+  title: string;
+  childPageUids: string[];
+}
+
 export interface ExportEntry {
   name: string;
   databases: ManifestDatabase[];
+  standalonePages: ManifestPage[];
   pageCount: number;
 }
 

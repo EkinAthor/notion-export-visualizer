@@ -116,6 +116,7 @@ The build pipeline infers column types from CSV data:
 
 | Type | Detection | Example |
 |------|-----------|---------|
+| `title` | First column named "Name" / "Task name", or >30% values match page filenames | Page title column |
 | `date` | Matches `"Month DD, YYYY"` pattern | `January 31, 2024` |
 | `date_range` | Contains ` → ` separator | `Sep 8, 2024 → Sep 12, 2024` |
 | `multi_select` | Comma-separated recurring values | `1on1, internal` |
@@ -123,7 +124,17 @@ The build pipeline infers column types from CSV data:
 | `person` | Column name hint (Attendees, Assignee, etc.) | `John Smith, Jane Doe` |
 | `status` | Small set: Done / In progress / Not started | Task Status |
 | `select` | <15 unique values, no commas | Priority |
-| `text` | Default fallback | Name, Company |
+| `text` | Default fallback | Company, Description |
+
+## Schema Overrides
+
+If the type inferrer misclassifies a column, you can manually override it:
+
+1. Run `npm run build:data` — this generates a `metadata.json` in each export directory (e.g., `data/my-export/metadata.json`)
+2. Edit the `"type"` field for the column you want to override
+3. Re-run `npm run build:data` to apply
+
+The `_inferred` field tracks what the inferrer detected. Your overrides are preserved across rebuilds as long as `type` differs from `_inferred`.
 
 ## Routes
 

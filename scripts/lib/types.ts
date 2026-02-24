@@ -1,6 +1,7 @@
 // Build-time types for the data processing pipeline
 
 export type ColumnType =
+  | 'title'
   | 'text'
   | 'date'
   | 'date_range'

@@ -14,6 +14,8 @@ interface CellRendererProps {
 
 export function CellRenderer({ type, value }: CellRendererProps) {
   switch (type) {
+    case 'title':
+      return <TextCell value={value} />;
     case 'date':
     case 'date_range':
       return <DateCell value={value} />;

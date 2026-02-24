@@ -12,7 +12,7 @@ interface FilterBarProps {
 export function FilterBar({ columns, filters, onSetFilter, onSetFilters, onClearFilters }: FilterBarProps) {
   const [showPopover, setShowPopover] = useState(false);
   const filterableColumns = columns.filter(c =>
-    ['multi_select', 'select', 'status', 'person', 'text', 'date'].includes(c.type)
+    ['title', 'multi_select', 'select', 'status', 'person', 'text', 'date'].includes(c.type)
   );
 
   // Local draft state for all columns while popover is open

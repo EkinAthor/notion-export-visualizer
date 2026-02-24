@@ -1,0 +1,75 @@
+{
+  "_description": "Schema metadata for Notion Export Visualizer. Edit 'type' to override inferred types. Run 'npm run build:data' to apply.",
+  "_validTypes": [
+    "title",
+    "text",
+    "date",
+    "date_range",
+    "multi_select",
+    "url",
+    "person",
+    "status",
+    "select"
+  ],
+  "databases": {
+    "bb22cc33dd44ee55ff66778899001122": {
+      "title": "Notes",
+      "columns": {
+        "Name": {
+          "type": "title",
+          "_inferred": "title"
+        },
+        "Category": {
+          "type": "text",
+          "_inferred": "text"
+        },
+        "Period": {
+          "type": "date_range",
+          "_inferred": "date_range"
+        }
+      }
+    },
+    "6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c": {
+      "title": "Tasks",
+      "columns": {
+        "Task name": {
+          "type": "title",
+          "_inferred": "title"
+        },
+        "Status": {
+          "type": "status",
+          "_inferred": "status"
+        },
+        "Priority": {
+          "type": "text",
+          "_inferred": "text"
+        }
+      }
+    },
+    "aa11bb22cc33dd44ee55ff6677889900": {
+      "title": "Projects",
+      "columns": {
+        "Name": {
+          "type": "title",
+          "_inferred": "title"
+        },
+        "Status": {
+          "type": "status",
+          "_inferred": "status"
+        },
+        "Tags": {
+          "type": "multi_select",
+          "_inferred": "multi_select"
+        },
+        "Due Date": {
+          "type": "text",
+          "_inferred": "text"
+        },
+        "Link": {
+          "type": "url",
+          "_inferred": "url"
+        }
+      }
+    }
+  }
+}

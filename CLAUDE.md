@@ -39,7 +39,7 @@ npm run lint         # ESLint
 - **No tests exist yet.** If adding tests, use Vitest (already compatible with the Vite setup).
 - **URL-serialized state.** Filter and sort state lives in URL search params (`?sort=Date&dir=desc&f_Tags=Customer`), not React state. This makes views shareable/bookmarkable. State is also persisted to `localStorage` (keyed `db_view_{uid}`) and hydrated on mount when no URL params exist. URL params always take precedence.
 - **One JSON file per page.** Pages are loaded on demand to keep initial load fast. Databases are loaded in full (largest is 602 rows).
-- **Column types are inferred, not declared.** The type inferrer (`scripts/lib/type-inferrer.ts`) uses heuristics (value patterns + column name hints). Adjust thresholds there if type detection is wrong.
+- **Column types are inferred, then overridable.** The type inferrer (`scripts/lib/type-inferrer.ts`) uses heuristics (value patterns + column name hints). Users can override inferred types by editing `data/{export}/metadata.json` (generated on first build). Adjust inferrer thresholds for systematic fixes, use metadata overrides for one-off corrections.
 - **`_all.csv` for data, view CSV for column order.** The build pipeline reads row data from `*_all.csv` but takes column ordering from the non-`_all` variant (which reflects the user's Notion view).
 
 ## File Organization
@@ -56,6 +56,7 @@ npm run lint         # ESLint
 | `asset-resolver.ts` | Copy images/docs to `public/data/assets/` |
 | `cross-ref-resolver.ts` | Match DB rows to pages, resolve inline DB refs |
 | `json-emitter.ts` | Write manifest, per-db, per-page, search-index JSON |
+| `metadata.ts` | Read/write `metadata.json` for schema overrides; merge user overrides with inferred types |
 | `types.ts` | Build-time interfaces |
 
 ### React SPA (`src/`)
@@ -82,7 +83,10 @@ npm run lint         # ESLint
 5. Rebuild data: `npm run build:data`
 
 ### Fixing type inference for a column
-Edit `scripts/lib/type-inferrer.ts`. The inferrer checks in priority order: date_range, date, url, person (name hint), status (name hint + small set), multi_select (commas), select (small unique set), text (fallback). Adjust thresholds or add column name hints.
+Edit `scripts/lib/type-inferrer.ts`. The inferrer checks in priority order: title (first column + name/page-match heuristic), date_range, date, url, person (name hint), status (name hint + small set), multi_select (commas), select (small unique set), text (fallback). Adjust thresholds or add column name hints.
+
+### Overriding column types
+Run `npm run build:data` to generate `data/{export}/metadata.json`. Edit the `"type"` field for any column, then re-run `npm run build:data`. Overrides persist across rebuilds. The `_inferred` field shows the auto-detected type for reference.
 
 ### Adding a new Notion export
 1. Unzip into `data/{name}/` (each subdirectory of `data/` is auto-discovered as a separate export)

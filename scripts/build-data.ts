@@ -13,11 +13,13 @@ import { scanDirectory } from './lib/scanner.js';
 import { parseCsv } from './lib/csv-parser.js';
 import { parseMarkdown } from './lib/md-parser.js';
 import { inferColumnTypes } from './lib/type-inferrer.js';
+import type { InferContext } from './lib/type-inferrer.js';
 import { extractTitle } from './lib/uid-extractor.js';
 import { resolveAssets } from './lib/asset-resolver.js';
 import { matchRowsToPages, resolveInlineDatabases } from './lib/cross-ref-resolver.js';
+import { applyMetadataOverrides, mergeAndWriteMetadata } from './lib/metadata.js';
 import { emitJson } from './lib/json-emitter.js';
-import type { DatabaseDef, PageDef, ScannedFile, ExportData } from './lib/types.js';
+import type { DatabaseDef, PageDef, ScannedFile, ExportData, ColumnType } from './lib/types.js';
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '..');
 const DATA_ROOT = path.join(PROJECT_ROOT, 'data');
@@ -60,6 +62,22 @@ function processExport(exportName: string, exportPath: string): ExportData {
 
   console.log(`Found: ${csvAllFiles.length} _all.csv, ${csvViewFiles.length} view.csv, ${mdFiles.length} .md, ${assetFiles.length} assets`);
 
+  // Pre-scan: build page title sets per DB directory for title column detection.
+  // Group md file titles by the normalized directory name they sit in.
+  const pageTitlesByDir = new Map<string, Set<string>>();
+  for (const mf of mdFiles) {
+    if (!mf.uid) continue;
+    const pageTitle = extractTitle(mf.name);
+    const normalized = normalizeTitle(pageTitle);
+    for (const dir of mf.dirParts) {
+      const normDir = normalizeTitle(dir);
+      if (!pageTitlesByDir.has(normDir)) {
+        pageTitlesByDir.set(normDir, new Set());
+      }
+      pageTitlesByDir.get(normDir)!.add(normalized);
+    }
+  }
+
   // 2. Parse databases from CSV pairs (_all for data, view for column order)
   const databases: DatabaseDef[] = [];
 
@@ -92,8 +110,11 @@ function processExport(exportName: string, exportPath: string): ExportData {
       orderedHeaders = allHeaders;
     }
 
-    const columns = inferColumnTypes(orderedHeaders, rows);
     const title = extractTitle(allFile.name);
+    const context: InferContext = {
+      pageTitles: pageTitlesByDir.get(normalizeTitle(title)),
+    };
+    const columns = inferColumnTypes(orderedHeaders, rows, context);
 
     // Determine if this is a nested DB (lives inside a page's folder)
     let parentPageUid: string | undefined;
@@ -124,6 +145,19 @@ function processExport(exportName: string, exportPath: string): ExportData {
   }
 
   console.log(`Parsed ${databases.length} databases`);
+
+  // Capture inferred types before applying overrides
+  const inferredTypes = new Map<string, Map<string, ColumnType>>();
+  for (const db of databases) {
+    const colTypes = new Map<string, ColumnType>();
+    for (const col of db.columns) {
+      colTypes.set(col.name, col.type);
+    }
+    inferredTypes.set(db.uid, colTypes);
+  }
+
+  // Apply user overrides from metadata.json (mutates db.columns in place)
+  applyMetadataOverrides(databases, exportPath);
 
   // 3. Parse markdown pages
   const pages: PageDef[] = [];
@@ -212,6 +246,9 @@ function processExport(exportName: string, exportPath: string): ExportData {
   }
 
   console.log(`Copied assets for ${assetMap.size} pages`);
+
+  // 7. Write metadata.json for schema overrides
+  mergeAndWriteMetadata(exportPath, databases, inferredTypes);
 
   return { name: exportName, databases, pages };
 }

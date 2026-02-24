@@ -10,6 +10,20 @@ const URL_PATTERN = /^https?:\/\//;
 const PERSON_HINTS = ['attendees', 'assignee', 'owner', 'person', 'people', 'assigned'];
 // Column name hints for status type
 const STATUS_HINTS = ['status'];
+// Column name hints for title type
+const TITLE_HINTS = ['name', 'task name'];
+
+export interface InferContext {
+  /** Normalized page titles belonging to this database, used for title column detection */
+  pageTitles?: Set<string>;
+}
+
+/**
+ * Normalize a string for fuzzy matching: lowercase, strip non-alphanumeric.
+ */
+function normalizeForMatch(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
 
 /**
  * Infer column types from a set of CSV rows.
@@ -18,8 +32,9 @@ const STATUS_HINTS = ['status'];
 export function inferColumnTypes(
   headers: string[],
   rows: Record<string, string>[],
+  context?: InferContext,
 ): ColumnSchema[] {
-  return headers.map(name => {
+  return headers.map((name, index) => {
     const values = rows
       .map(r => (r[name] ?? '').trim())
       .filter(v => v.length > 0);
@@ -28,7 +43,7 @@ export function inferColumnTypes(
       return { name, type: 'text' as ColumnType };
     }
 
-    const type = inferSingleColumn(name, values);
+    const type = inferSingleColumn(name, values, index, context);
     const schema: ColumnSchema = { name, type };
 
     if (type === 'select' || type === 'multi_select' || type === 'status' || type === 'person') {
@@ -47,8 +62,28 @@ export function inferColumnTypes(
   });
 }
 
-function inferSingleColumn(name: string, values: string[]): ColumnType {
+function inferSingleColumn(
+  name: string,
+  values: string[],
+  index: number,
+  context?: InferContext,
+): ColumnType {
   const lowerName = name.toLowerCase();
+
+  // Title detection: first column (index 0) with name hint or page title match
+  if (index === 0) {
+    if (TITLE_HINTS.includes(lowerName)) {
+      return 'title';
+    }
+    if (context?.pageTitles && context.pageTitles.size > 0) {
+      const matchCount = values.filter(v =>
+        context.pageTitles!.has(normalizeForMatch(v))
+      ).length;
+      if (matchCount > values.length * 0.3) {
+        return 'title';
+      }
+    }
+  }
 
   // Date range check first (contains →)
   const dateRangeCount = values.filter(v => DATE_RANGE_PATTERN.test(v)).length;

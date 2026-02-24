@@ -1,6 +1,7 @@
 // Frontend types matching the JSON schema emitted by build-data
 
 export type ColumnType =
+  | 'title'
   | 'text'
   | 'date'
   | 'date_range'

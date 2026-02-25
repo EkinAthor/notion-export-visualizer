@@ -163,4 +163,12 @@ The `_inferred` field tracks what the inferrer detected. Your overrides are pres
 - **PapaParse** -- CSV parsing with BOM handling
 - **tsx** -- Run TypeScript build scripts directly
 
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup and guidelines.
+
+## License
+
+[MIT](./LICENSE)
+
 

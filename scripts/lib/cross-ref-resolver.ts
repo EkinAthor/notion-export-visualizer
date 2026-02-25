@@ -1,4 +1,4 @@
-import type { DatabaseDef, PageDef, ScannedFile } from './types.js';
+import type { DatabaseDef, ScannedFile } from './types.js';
 import { extractUid, extractTitle } from './uid-extractor.js';
 
 /**

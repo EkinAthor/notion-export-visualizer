@@ -9,6 +9,7 @@ export function useDatabase(uid: string | undefined) {
 
   useEffect(() => {
     if (!uid) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting state before async fetch is intentional
     setDatabase(null);
     setLoading(true);
     setError(null);

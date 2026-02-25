@@ -17,7 +17,6 @@ export function resolveAssets(
   for (const asset of assets) {
     // Find which page this asset belongs to by walking up the directory
     let pageUid: string | undefined;
-    const dirPath = asset.dirParts.join('/');
 
     // Try to match the asset's directory to a page's asset folder
     // Assets are in folders like: Meetings/{PageTitle}/image.png

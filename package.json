@@ -1,7 +1,15 @@
 {
   "name": "notion-export-visualizer",
-  "private": true,
   "version": "0.1.0",
+  "description": "A read-only web app that renders Notion export data (CSVs + markdown) as a Notion-like UI",
+  "author": "Marek Ovcacek",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marek-ovcacek/notion-export-visualizer.git"
+  },
+  "homepage": "https://github.com/marek-ovcacek/notion-export-visualizer#readme",
+  "keywords": ["notion", "export", "viewer", "markdown", "csv"],
   "type": "module",
   "scripts": {
     "dev": "vite",

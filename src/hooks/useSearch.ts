@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { SearchEntry } from '../types';
 import { loadSearchIndex } from '../data/loader';
 import { searchEntries, type SearchResult } from '../data/search-index';
@@ -6,19 +6,17 @@ import { searchEntries, type SearchResult } from '../data/search-index';
 export function useSearch() {
   const [index, setIndex] = useState<SearchEntry[]>([]);
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     loadSearchIndex().then(setIndex);
   }, []);
 
-  useEffect(() => {
+  const results: SearchResult[] = useMemo(() => {
     if (index.length > 0 && query) {
-      setResults(searchEntries(index, query));
-    } else {
-      setResults([]);
+      return searchEntries(index, query);
     }
+    return [];
   }, [query, index]);
 
   const open = useCallback(() => setIsOpen(true), []);

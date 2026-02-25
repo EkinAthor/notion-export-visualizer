@@ -9,6 +9,7 @@ export function usePage(uid: string | undefined) {
 
   useEffect(() => {
     if (!uid) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting state before async fetch is intentional
     setLoading(true);
     setError(null);
     loadPage(uid)

@@ -6,9 +6,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marek-ovcacek/notion-export-visualizer.git"
+    "url": "git+https://github.com/EkinAthor/notion-export-visualizer.git"
   },
-  "homepage": "https://github.com/marek-ovcacek/notion-export-visualizer#readme",
+  "homepage": "https://github.com/EkinAthor/notion-export-visualizer#readme",
   "keywords": ["notion", "export", "viewer", "markdown", "csv"],
   "type": "module",
   "scripts": {

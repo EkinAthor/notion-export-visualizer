@@ -12,6 +12,35 @@
     "select"
   ],
   "databases": {
+    "cc11dd22ee33ff44aa55bb6677880099": {
+      "title": "Book Library",
+      "columns": {
+        "Name": {
+          "type": "title",
+          "_inferred": "title"
+        },
+        "Author": {
+          "type": "person",
+          "_inferred": "text"
+        },
+        "Status": {
+          "type": "status",
+          "_inferred": "status"
+        },
+        "Genre": {
+          "type": "multi_select",
+          "_inferred": "multi_select"
+        },
+        "Rating": {
+          "type": "select",
+          "_inferred": "select"
+        },
+        "Published": {
+          "type": "date",
+          "_inferred": "date"
+        }
+      }
+    },
     "bb22cc33dd44ee55ff66778899001122": {
       "title": "Notes",
       "columns": {

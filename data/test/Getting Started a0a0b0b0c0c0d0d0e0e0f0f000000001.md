@@ -1,4 +1,6 @@
-# Notion Database Export Visualizer
+# Getting Started
+
+## Notion Database Export Visualizer
 
 A read-only web app that loads data from an unzipped Notion database export folder and renders it in a Notion-like fashion: database table views, page content with markdown rendering, search, and filtering.
 
@@ -8,11 +10,11 @@ Built with React + Vite. Fully client-side with build-time data processing into 
 
 **Database table view** — sortable columns, tag filters, typed cell renderers:
 
-![Database view](notion-visualization-database.png)
+![Database view](Getting%20Started/notion-visualization-database.png)
 
 **Page view** — rendered markdown with metadata bar, images, and inline databases:
 
-![Page view](notion-visualization-page.png)
+![Page view](Getting%20Started/notion-visualization-page.png)
 
 ## Quick Start
 
@@ -175,10 +177,8 @@ The `_inferred` field tracks what the inferrer detected. Your overrides are pres
 
 ## Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup and guidelines.
+Contributions are welcome! See CONTRIBUTING.md for development setup and guidelines.
 
 ## License
 
-[MIT](./LICENSE)
-
-
+MIT
